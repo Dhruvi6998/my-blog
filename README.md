@@ -4,7 +4,7 @@ A simple full-stack blogging application built with **Vite (React)** on the fron
 
 ---
 
-## 🚀 Features
+## Features
 - Frontend: React (Vite) with API proxy setup  
 - Backend: Node.js + Express with MongoDB  
 - Firebase integration (using `credentials.json`)  
