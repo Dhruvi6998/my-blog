@@ -1,0 +1,48 @@
+import { useState } from 'react';
+import axios from 'axios';
+import useUser from '../hooks/useUser';
+
+const AddCommentForm = ({ articleName, onArticleUpdated }) => {
+    const [commentText, setCommentText] = useState('');
+    const { user } = useUser();
+
+    const addComment = async () => {
+        try {
+            // Build headers object
+            const headers = {
+                'Content-Type': 'application/json',
+            };
+            if (user) {
+                headers.authtoken = await user.getIdToken();
+            }
+
+            const response = await axios.post(
+                `/api/articles/${articleName}/comments`,
+                { text: commentText },
+                { headers }
+            );
+
+            onArticleUpdated(response.data);
+            setCommentText('');
+        } catch (error) {
+            console.error("Error adding comment:", error);
+        }
+    };
+
+    return (
+        <div id="add-comment-form">
+            <h3>Add a Comment</h3>
+            {user && <p>You are posting as {user.email}</p>}
+
+            <textarea
+                value={commentText}
+                onChange={e => setCommentText(e.target.value)}
+                rows="4"
+                cols="50"
+            />
+            <button onClick={addComment}>Add Comment</button>
+        </div>
+    );
+};
+
+export default AddCommentForm;
